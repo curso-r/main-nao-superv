@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Modelagem Não Supervisionada</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Modelagem Não Supervisionada
+]
+.subtitle[
+## Modelos não supervisionados
+]
+.author[
+### <img src = 'https://d33wubrfki0l68.cloudfront.net/9b0699f18268059bdd2e5c21538a29eade7cbd2b/67e5c/img/logo/cursor1-5.png' width = '30%'>
+]
+.date[
+### agosto de 2022
+]
+
+---
+
+
+
+
+class: middle, center
+
+# Aprendizado supervisionado vs Não supervisionado
+
+---
+
+## Machine Learning
+
+&lt;img src="https://wordstream-files-prod.s3.amazonaws.com/s3fs-public/styles/simple_image/public/images/machine-learning1.png?Q_SmWhhhAEOO_32HNjPhcxsPhreWV26o&amp;itok=yjEJbEKD" style="display: block; margin-left: auto; margin-right: auto;" width=70%&gt;&lt;/img&gt;
+
+.footnote[
+ fonte: [business2community](https://www.business2community.com/trends-news/10-companies-using-machine-learning-cool-ways-01889944)
+]
+
+---
+
+## Aprendizado supervisionado
+
+&lt;br&gt;
+
+&lt;img src="https://d33wubrfki0l68.cloudfront.net/295643c6243701ae6a9bac3fb8ad467ff0ce3c84/d1785/img/logo/cursor1-41.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+&lt;br&gt;
+&lt;br&gt;
+
+&lt;img src="img/logo_r6.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Motivação
+
+
+Somos consultores e fomos contratados para dar conselhos para uma empresa aumentar as suas vendas.
+
+Obtivemos o seguinte banco de dados
+
+&lt;img src="02-introducao_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+
+* PERGUNTA: Quantas vendas terão se eu investir X? Em qual mídia eu escolho alocar meu orçamento?
+
+
+---
+
+# Motivação - outro exemplo
+
+
+Somos da área de inadimplência e precisamos agir para assessorar clientes em situação iminente de atraso.
+
+Obtivemos o seguinte banco de dados
+
+&lt;img src="02-introducao_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+* PERGUNTA: Qual a probabilidade do contrato 123 atrasar a próxima fatura no mês que vem?
+
+---
+
+# Motivação - outro exemplo
+
+
+Somos da área de inadimplência e precisamos agir para assessorar clientes em situação iminente de atraso.
+
+Obtivemos o seguinte banco de dados
+
+&lt;img src="02-introducao_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+* PERGUNTA: Qual a probabilidade do contrato 123 atrasar a próxima fatura no mês que vem?
+
+---
+
+# Motivação - outro exemplo
+
+
+Somos da área de inadimplência e precisamos agir para assessorar clientes em situação iminente de atraso.
+
+Obtivemos o seguinte banco de dados
+
+&lt;img src="02-introducao_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+* PERGUNTA: Qual a probabilidade do contrato 123 atrasar a próxima fatura no mês que vem?
+
+---
+
+# Motivação - outro exemplo
+
+
+Somos da área de inadimplência e precisamos agir para assessorar clientes em situação iminente de atraso.
+
+Obtivemos o seguinte banco de dados
+
+&lt;img src="02-introducao_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+
+* PERGUNTA: Qual a probabilidade do contrato 123 atrasar a próxima fatura no mês que vem?
+
+
+---
+
+# Motivação - outro exemplo
+
+
+Somos da área de inadimplência e precisamos agir para assessorar clientes em situação iminente de atraso.
+
+Obtivemos o seguinte banco de dados
+
+&lt;img src="02-introducao_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+
+* PERGUNTA: Qual a probabilidade do contrato 123 atrasar a próxima fatura no mês que vem?
+
+---
+
+# Motivação - outro exemplo
+
+
+Somos da área de inadimplência e precisamos agir para assessorar clientes em situação iminente de atraso.
+
+Obtivemos o seguinte banco de dados
+
+&lt;img src="02-introducao_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+
+* PERGUNTA: Qual a probabilidade do contrato 123 atrasar a próxima fatura no mês que vem?
+
+
+---
+
+# Machine Learning 
+
+Matematicamente, queremos encontrar uma função `\(f()\)` tal que:
+
+&lt;img src="static/img/y_fx.png" style="position: fixed; width: 40%; top: 250px; left: 300px;"&gt;
+
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+
+Nos exemplos:
+
+`\(vendas = f(midia, investimento)\)`
+
+`\(inadimplência = f(valor da parcela, tipo de contrato)\)`
+
+
+
+---
+
+# Modo - Regressão e Classificação
+
+Existem dois principais tipos de problemas em Machine Learning:
+
+.pull-left[
+
+## Regressão
+
+__Y__ é uma variável contínua.
+
+- Volume de vendas
+- Peso
+- Temperatura
+- Valor de Ações
+
+]
+
+.pull-right[
+
+## Classificação
+
+__Y__ é uma variável categórica.
+
+- Fraude/Não Fraude
+- Pegou em dia/Não pagou
+- Cancelou assinatura/Não cancelou
+- Gato/Cachorro/Cavalo/Outro
+
+]
+
+
+---
+
+# Modelagem não supervisionada
+
+A principal diferença é não termos `\(X_1, X_2, \dots\)` e `\(Y_1, Y_2, \dots\)`. Não temos nenhum `\(Y\)`, então nossos algoritmos vão procurar encontrar _coisas interessantes_ sobre `\(X_1, X_2, ..., X_p\)`. Aqui vale _praticamente_ tudo, podemos responder perguntas como:
+
+- Tem algum jeito informativo de visualizar os dados?
+- Podemos descobrir subgrupos dentre as variáveis?
+- As variáveis são parecidas a ponto de podermos representa-las em dimensão menor?
+
+Como se pode notar, modelagem não supervisionada pode ser mais subjetiva e frequentemente é parte de uma análise exploratória.
+
+---
+
+# Modelagem não supervisionada
+
+De maneira geral existem três problemas principais que os métodos de modelagem supervisionada se propõe a resolver:
+
+- Clusterização
+- Redução de dimensionalidade
+- Detecção de anomalias
+
+Por outro ponto de vista, também é comum que se use os _outputs_ ou parte desses algoritmos como parte de um modelo supervisionado. Por exemplo: 
+
+`$$X_1, ..., X_p \rightarrow \text{grupos} \rightarrow Y_i = \text{grupo}_i$$`
+
+---
+
+## Clusterização | Iris
+
+Exemplos clássico: banco de dados `iris`:
+
+&lt;img src="http://1.bp.blogspot.com/-T2GENttCVWs/U3UZN7PfepI/AAAAAAAAAAU/mJDRhnhmNL4/s1600/3-b8bbc465fa.jpg" style="display: block; margin: auto;" /&gt;
+
+Existem espécies de plantas que influenciam essas características biológicas.
+
+---
+
+## Clusterização | Iris
+
+&lt;img src="02-introducao_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Clusterização | Iris
+
+.pull-left[
+
+
+```r
+iris |&gt; 
+  select(-Species) |&gt; 
+  kmeans(centers = 3) |&gt; 
+  augment(iris) |&gt; 
+  ggplot() +
+  aes(
+    Petal.Length,
+    Petal.Width)
+  geom_point(
+    aes(color = .cluster),
+    size=4)
+```
+
+]
+
+.pull-right[
+
+&lt;img src="02-introducao_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+
+## Clusterização | Iris | Grupos reais
+
+&lt;img src="02-introducao_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+# Clusterização no R
+
+
+---
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "4:3"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

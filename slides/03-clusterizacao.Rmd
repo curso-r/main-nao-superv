@@ -1,0 +1,377 @@
+---
+title: "Modelagem Não Supervisionada"
+subtitle: "Modelos de clusterização"
+author: "<img src = 'https://d33wubrfki0l68.cloudfront.net/9b0699f18268059bdd2e5c21538a29eade7cbd2b/67e5c/img/logo/cursor1-5.png' width = '30%'>"
+date: "`r paste(lubridate::month(Sys.Date(), label = TRUE, abbr = FALSE, locale = 'pt_BR.UTF-8'), 'de', lubridate::year(Sys.Date()))`"
+output:
+  xaringan::moon_reader:
+    css: ["default", "default-fonts", "css/xaringan-themer.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "4:3"
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+
+link <- function(href, ...) {
+  htmltools::a(
+    href = href,
+    target = "_blank",
+    ...
+  )
+}
+
+library(ggplot2)
+library(magrittr)
+library(knitr)
+library(tidyverse)
+library(ISLR)
+library(kableExtra)
+theme_set(theme_minimal(14))
+options(htmltools.dir.version = FALSE)
+
+knitr::opts_chunk$set(
+  echo = FALSE, 
+  message = FALSE, 
+  warning = FALSE,
+  fig.width=6, 
+  fig.height=6,
+  fig.align='center'
+)
+library(rpart)
+adv <- read_csv("static/data/Advertising.csv") %>%
+  rename(vendas = sales)
+```
+
+class: middle, center
+
+# Modelos de clusterização
+
+---
+
+## Introdução
+
+Um modelo de clusterização presume que existem grupos escondidos (ou latentes) dando origem aos dados observados. 
+
+Um **algoritmo** de clusterização é uma estratégia para encontrar esses grupos. As vezes a gente sabe que existem grupos (modelo) mas o **algoritmo** não é capaz de encontrar. 
+
+```{r}
+knitr::include_graphics("https://www.researchgate.net/profile/Absalom-Ezugwu/publication/344590665/figure/fig1/AS:945789706702848@1602505246144/Clustering-example-with-intra-and-inter-clustering-illustrations.png")
+```
+
+---
+
+## Estratégias de clusterização
+
+Os principais algoritmos podem ser separados de acordo com algumas estratégias principais:
+
+- Métodos hierárquicos:
+
+    - Vai agrupando as observações mais próximas até que comece a aparecer uniões de elementos diferentes demais.
+    
+- Métodos baseados em centróides
+
+    - Procura os melhores centros de massa dentro de cada nuvem de pontos
+- Métodos baseados em distribuições
+
+    - Procura grupos de acordo com hipóteses sobre a distribuição dos dados
+
+---
+
+## Clustering hierárquico
+
+A ideia principal por trás do clustering hierárquico é construir grupos a partir de uma noção de distância entre pontos.
+
+Uma distância que aparece em mapas, telas, na geometria etc é a distância euclidiana:
+
+$$D((x_1,y_1),(x_2,y_2)) = \sqrt{(x_1-x_2)^2+(y_1-y_2)^2}$$
+
+```{r}
+knitr::include_graphics("https://www.tutorialexample.com/wp-content/uploads/2020/05/Euclidean-distance-in-tensorflow.png")
+```
+
+---
+
+## Medidas de distância
+
+Embora a distância euclidiana tenha uma interpretação física, ela serve para comparar linhas de tabelas arbitrárias se você quiser:
+
+Pontos próximos:
+
+$$\text{Distância }: 0,5477$$
+
+```{r}
+iris[1,] |> 
+  tibble::as.tibble() |> 
+  knitr::kable()
+```
+
+<br>
+
+```{r}
+iris[17,] |> 
+  tibble::as.tibble() |> 
+  knitr::kable()
+```
+
+---
+
+## Medidas de distância
+
+Embora a distância euclidiana tenha uma interpretação física, ela serve para comparar linhas de tabelas arbitrárias se você quiser:
+
+Pontos distantes:
+
+$$\text{Distância }: 6,4984$$
+
+```{r}
+iris[1,] |> 
+  tibble::as.tibble() |> 
+  knitr::kable()
+```
+
+<br>
+
+```{r}
+iris[119,] |> 
+  tibble::as.tibble() |> 
+  knitr::kable()
+```
+
+---
+
+## Medidas de distância
+
+Existem outras medidas de distância, mas não precisamos pensar nelas agora. Vamos prosseguir identificando o que um clustering hierárquico faz a partir de uma noção de distância.
+
+O que entra em um algoritmo de clusterização hierárquica é o que é usualmente chamado de **matriz de distâncias**:
+
+```{r}
+iris[1:3,] |> 
+  tibble::rownames_to_column(var = "identificador") |> 
+  knitr::kable()
+```
+
+<br>
+
+```{r}
+iris[1:3,] |> 
+  dist() |> 
+  as.matrix() |> 
+  as.tibble() |> 
+  tibble::rownames_to_column(var = "identificador") |> 
+  knitr::kable()
+```
+
+---
+
+## Dendrograma
+
+- O próximo passo é construir um mapeamento de quais pontos estão próximos e quais não estão. Isso é feito usando um dendrograma (dendro = árvore). O dendrograma pode ser executado seguindo os passos:
+
+**Passo 1**: Calcule as distâncias entre os pontos:
+
+```{r}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Clusters.svg/250px-Clusters.svg.png")
+```
+
+---
+
+## Dendrograma
+
+**Passo 2**: Una os pontos mais próximos:
+
+```{r}
+knitr::include_graphics("static/img/passo1.png")
+```
+
+---
+
+## Dendrograma
+
+**Passo 3**: Una os próximos pontos mais próximos:
+
+```{r}
+knitr::include_graphics("static/img/passo2.png")
+```
+
+---
+
+## Dendrograma
+
+**Passo 4**: A união de dois pontos conta como um novo ponto e a distância até um ponto e esse agrupamento pode ser, por exemplo a distância média ao membros:
+
+```{r}
+knitr::include_graphics("static/img/passo3.png")
+```
+
+---
+
+## Dendrograma
+
+.pull-left[**Passo 5**: A mesma lógica se aplica a conjuntos com mais do que 2 pontos: compara-se, por exemplo, média com média.
+]
+
+.pull-right[
+```{r}
+knitr::include_graphics("static/img/passo4.png")
+```
+]
+
+---
+
+## Dendrograma
+
+.pull-left[
+
+**Passo 6**: O dendrogama está completo quando todas os elementos estão contemplados e pertencem a algum grau de agrupamento.
+
+]
+
+
+.pull-right[
+```{r}
+knitr::include_graphics("static/img/passo5.png")
+```
+]
+---
+
+## Dendrograma | dataset iris
+
+Aqui temos um exemplo de dendrograma gerado usando a distância euclidiana em 12 linhas do dataset iris (4 por espécie).
+
+```{r}
+library(ggdendro)
+
+iris |> 
+  group_by(Species) |> 
+  dplyr::sample_n(4) |> 
+  ungroup() |> 
+  select(-Species) |> 
+  dist() |> 
+  hclust() |> 
+  ggdendrogram() + 
+  coord_flip()
+```
+
+---
+
+## Dendrograma | dataset iris
+
+Podemos cortar onde quisermos e obter qualquer número de grupos que desejarmos dentro do dendrograma. Sendo assim podemos interpretar o ato de construir um dendrogama e construir qualquer número $k$ de grupos como uma técnica descritiva.
+
+.pull-left[
+
+```{r}
+aux <- iris |> 
+  group_by(Species) |> 
+  dplyr::sample_n(20) |> 
+  ungroup() |> 
+  select(-Species) 
+
+dendro <- aux |> 
+  dist() |> 
+  hclust() 
+
+plot(dendro)
+
+dendro |> 
+  rect.hclust(k = 3, border = "blue")
+```
+
+]
+
+.pull-right[
+
+```{r}
+aux <- iris |> 
+  group_by(Species) |> 
+  dplyr::sample_n(10) |> 
+  ungroup() |> 
+  select(-Species) 
+
+dendro <- aux |> 
+  dist() |> 
+  hclust() 
+
+plot(dendro)
+
+dendro |> 
+  rect.hclust(k = 2, border = "blue")
+```
+
+]
+---
+
+## Dendrograma | dataset iris
+
+Um jeito mais objetivo de escolher o número de grupos é olhando o tamanho dos saltos na coluna de distância. Uma estratégia tecnicamente viável é parar de cortar quando no maior salto possível entre um grupo e outro. No caso do `iris` isso acontece no segundo grupo. A distância entre os grupos não aumentaria indo do segundo para o terceiro grupo.
+
+```{r}
+dendro <- iris[,-5] |> 
+  dist() |> 
+  hclust() 
+
+barplot(dendro$height,
+  names.arg = (nrow(iris[,-5]) - 1):1 # show the number of cluster below each bars
+)
+```
+
+---
+
+## Dendrograma | dataset iris
+
+Mas nós temos 3 espécies né? O que pode ter acontecido?
+
+Aqui entra um fato importante: estamos estudando um **algoritmo** de clusterização. Existindo grupos por trás ou não, ele vai devolver algum resultado. Por isso é importante alterar as configurações dos algoritmos de clusterização para verificar se nossos resultados são sensíveis a elas ou não. Nos algoritmos hierárquicos as principais fontes de variação são:
+
+- a métrica de **distância utilizada**
+- a **regra para calcular a distância entre dois grupos** de pontos. É a média das distâncias? É a mediana? É a maior distância de um ponto a qualquer elemento de um grupo etc.
+
+---
+
+## Distâncias | Distância de Manhattan
+
+.pull-left[
+
+  Essa distância também é conhecida como "distância do taxista" pois os segmentos que constituem o seu compromimento só podem ser verticais ou horizontais.
+  
+  Matematicamente, essa noção pode ser descrita como:
+  
+  $$d((x_1,y_1), (x_2,y_2)) = |x_1-x_2|+|y_1-y_2|$$
+
+]
+
+.pull-right[
+```{r, out.width="100%"}
+knitr::include_graphics("static/img/manhattan.png")
+```
+]
+---
+
+## Dendrograma | dataset iris
+
+Se mudássemos a noção de distância para a distância de Manhattan encontraríamos outro resultado: 
+
+```{r}
+aux <- iris |> 
+  group_by(Species) |> 
+  #dplyr::sample_n(30) |> 
+  #ungroup() |> 
+  select(-Species) 
+
+dendro <- hclust(dist(aux, method = "manhattan"))
+
+barplot(dendro$height,
+  names.arg = (nrow(aux) - 1):1 # show the number of cluster below each bars
+)
+```
+
+Três grupos! Como é segundo o conhecimento biológico sobre esses dados.
+
+---
+
