@@ -316,8 +316,8 @@ dendro <- iris[,-5] |>
   dist() |> 
   hclust() 
 
-barplot(dendro$height,
-  names.arg = (nrow(iris[,-5]) - 1):1 # show the number of cluster below each bars
+barplot(dendro$height[(nrow(iris)-10):(nrow(iris)-1)],
+  names.arg = 10:1 # show the number of cluster below each bars
 )
 ```
 
@@ -357,7 +357,7 @@ knitr::include_graphics("static/img/manhattan.png")
 
 Se mudássemos a noção de distância para a distância de Manhattan encontraríamos outro resultado: 
 
-```{r}
+```{r, out.width="50%"}
 aux <- iris |> 
   group_by(Species) |> 
   #dplyr::sample_n(30) |> 
@@ -366,8 +366,8 @@ aux <- iris |>
 
 dendro <- hclust(dist(aux, method = "manhattan"))
 
-barplot(dendro$height,
-  names.arg = (nrow(aux) - 1):1 # show the number of cluster below each bars
+barplot(dendro$height[(nrow(aux)-10):(nrow(aux)-1)],
+  names.arg = 10:1 # show the number of cluster below each bars
 )
 ```
 
@@ -375,3 +375,20 @@ Três grupos! Como é segundo o conhecimento biológico sobre esses dados.
 
 ---
 
+## Métodos de centróides
+
+A clusterização hierárquica parte das observações e aglomera até que os clusters surjam naturalmente. 
+
+Clusterização baseada em centróide, por outro lado, normalmente são método iterativos que procuram os melhores "pontos de referência" para cada cluster. O número de clusters deve ser fixado no começo do algoritmo e então os "pontos de referência" (centróides) são atualizados até encontrar grupos tão diferentes quanto possível. 
+
+Por essa dinâmica, um dos métodos baseados em centróides mais famoso é o método das $k$-médias.
+
+---
+
+## Métodos de centróides | Visual
+
+```{r, out.width="65%"}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/K-means_convergence.gif/617px-K-means_convergence.gif?20170530143526")
+```
+
+---

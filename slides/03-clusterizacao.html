@@ -388,12 +388,27 @@ Aqui entra um fato importante: estamos estudando um **algoritmo** de clusteriza�
 
 Se mudássemos a noção de distância para a distância de Manhattan encontraríamos outro resultado: 
 
-&lt;img src="03-clusterizacao_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="03-clusterizacao_files/figure-html/unnamed-chunk-20-1.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 Três grupos! Como é segundo o conhecimento biológico sobre esses dados.
 
 ---
 
+## Métodos de centróides
+
+A clusterização hierárquica parte das observações e aglomera até que os clusters surjam naturalmente. 
+
+Clusterização baseada em centróide, por outro lado, normalmente são método iterativos que procuram os melhores "pontos de referência" para cada cluster. O número de clusters deve ser fixado no começo do algoritmo e então os "pontos de referência" (centróides) são atualizados até encontrar grupos tão diferentes quanto possível. 
+
+Por essa dinâmica, um dos métodos baseados em centróides mais famoso é o método das `\(k\)`-médias.
+
+---
+
+## Métodos de centróides | Visual
+
+&lt;img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/K-means_convergence.gif/617px-K-means_convergence.gif?20170530143526" width="65%" style="display: block; margin: auto;" /&gt;
+
+---
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
