@@ -2,7 +2,7 @@
 title: "Modelagem Não Supervisionada"
 subtitle: "Redução de dimensionalidade"
 author: "<img src = 'https://d33wubrfki0l68.cloudfront.net/9b0699f18268059bdd2e5c21538a29eade7cbd2b/67e5c/img/logo/cursor1-5.png' width = '30%'>"
-date: "`r paste(lubridate::month(Sys.Date(), label = TRUE, abbr = FALSE, locale = 'pt_BR.UTF-8'), 'de', lubridate::year(Sys.Date()))`"
+date: "29/08/2022"
 output:
   xaringan::moon_reader:
     css: ["default", "default-fonts", "css/xaringan-themer.css"]
@@ -15,5 +15,83 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+options(htmltools.dir.version = FALSE)
+
+library(ggplot2)
+library(magrittr)
+library(knitr)
+library(tidyverse)
+library(ISLR)
+library(kableExtra)
+
+link <- function(href, ...) {
+  htmltools::a(
+    href = href,
+    target = "_blank",
+    ...
+  )
+}
+  
+theme_set(theme_minimal(14))
+options(htmltools.dir.version = FALSE)
+
+knitr::opts_chunk$set(
+  echo = FALSE, 
+  message = FALSE, 
+  warning = FALSE,
+  fig.width=6, 
+  fig.height=6,
+  fig.align='center'
+)
 ```
+
+class: middle, center
+
+# Redução de dimensionalidade
+
+---
+# Ideia geral
+
+- A Análise de Componentes Principais é um algoritmo de **redução de dimensionalidade**, embora seus usos possam ser dos mais variados
+
+- Digamos que os nossos dados sejam representados pela matriz $X$, com $n$ linhas e $k$ colunas:
+
+$$X = \begin{bmatrix}x_{11}  \ x_{12} \ \dots \ x_{1k} \\ x_{21} \ x_{22} \ \dots \ x_{2k} \\ x_{i1} \ x_{i2} \ \dots x_{ik} \\ x_{n1} \ x_{n2} \dots \ x_{nk}\end{bmatrix}$$
+- A ideia do PCA é encontrar uma matriz $Y$ com $k$ linhas e $d$ colunas, onde $d$ é menor do que que $k$, que capte características importantes de $X$.
+
+- O processo de encontrar $Y$ consiste em usar essa matriz para tentar "reconstruir" $X$. Se a reconstrução for bem sucedida (tiver erro baixo), então podemos usar $Y$ ao invés de $X$ para várias coisas: modelagem, visualização, interpretação etc.
+
+---
+
+# Ideia geral
+
+- A fómula da reconstrução usada no PCA é conta com uma matriz auxiliar $A$:
+
+$$X' = Y A+\mu$$
+
+$$X = \begin{bmatrix}x_{11}  \ x_{12} \ \dots \ x_{1k} \\ x_{21} \ x_{22} \ \dots \ x_{2k} \\ x_{i1} \ x_{i2} \ \dots x_{ik} \\ x_{n1} \ x_{n2} \dots \ x_{nk}\end{bmatrix} = \begin{bmatrix}y_{11}  \ y_{12} \ \dots \ y_{1d} \\ y_{21} \ y_{22} \ \dots \ y_{2d} \\ y_{i1} \ y_{i2} \ \dots y_{id} \\ y_{n1} \ y_{n2} \dots \ y_{nd}\end{bmatrix} \times \begin{bmatrix} a_{11} \ \dots a_{1k} \\ \vdots \ \ddots \ \vdots \\a_{d1} \ \dots a_{dk}\end{bmatrix} + \mu$$
+---
+
+# Ideia geral
+
+- Em termos menos matemáticos, o que a fórmula acima expressa é uma mudança de base da matriz $X$. Estamos tentando escrever cada linha de $X$ como combinações lineares dos vetores coluna de $A$. 
+
+```{r, echo = FALSE, fig.width=5}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/GaussianScatterPCA.svg/1200px-GaussianScatterPCA.svg.png")
+```
+
+---
+
+# Ideia geral
+
+Observações: 
+
+- Se escolhermos $d = k$, não existe erros de reconstrução, é possível reconstruinr $X$ sem erro nenhum: $A$ pode ser a identidade e $Y$ pode ser igual a $X$.
+
+- Se o $d$ é menor que $k$ temos uma versão "zipada" de $X$.
+
+- Se $d = 2$ a versão "zipada" pode ser plotada em um gráfico de dispersão simples. 
+
+---
+
+---

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Modelagem Não Supervisionada</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Modelagem Não Supervisionada
+## Redução de dimensionalidade
+### <img src = 'https://d33wubrfki0l68.cloudfront.net/9b0699f18268059bdd2e5c21538a29eade7cbd2b/67e5c/img/logo/cursor1-5.png' width = '30%'>
+### 29/08/2022
+
+---
+
+
+
+
+class: middle, center
+
+# Redução de dimensionalidade
+
+---
+# Ideia geral
+
+- A Análise de Componentes Principais é um algoritmo de **redução de dimensionalidade**, embora seus usos possam ser dos mais variados
+
+- Digamos que os nossos dados sejam representados pela matriz `\(X\)`, com `\(n\)` linhas e `\(k\)` colunas:
+
+`$$X = \begin{bmatrix}x_{11}  \ x_{12} \ \dots \ x_{1k} \\ x_{21} \ x_{22} \ \dots \ x_{2k} \\ x_{i1} \ x_{i2} \ \dots x_{ik} \\ x_{n1} \ x_{n2} \dots \ x_{nk}\end{bmatrix}$$`
+- A ideia do PCA é encontrar uma matriz `\(Y\)` com `\(k\)` linhas e `\(d\)` colunas, onde `\(d\)` é menor do que que `\(k\)`, que capte características importantes de `\(X\)`.
+
+- O processo de encontrar `\(Y\)` consiste em usar essa matriz para tentar "reconstruir" `\(X\)`. Se a reconstrução for bem sucedida (tiver erro baixo), então podemos usar `\(Y\)` ao invés de `\(X\)` para várias coisas: modelagem, visualização, interpretação etc.
+
+---
+
+# Ideia geral
+
+- A fómula da reconstrução usada no PCA é conta com uma matriz auxiliar `\(A\)`:
+
+`$$X' = Y A+\mu$$`
+
+`$$X = \begin{bmatrix}x_{11}  \ x_{12} \ \dots \ x_{1k} \\ x_{21} \ x_{22} \ \dots \ x_{2k} \\ x_{i1} \ x_{i2} \ \dots x_{ik} \\ x_{n1} \ x_{n2} \dots \ x_{nk}\end{bmatrix} = \begin{bmatrix}y_{11}  \ y_{12} \ \dots \ y_{1d} \\ y_{21} \ y_{22} \ \dots \ y_{2d} \\ y_{i1} \ y_{i2} \ \dots y_{id} \\ y_{n1} \ y_{n2} \dots \ y_{nd}\end{bmatrix} \times \begin{bmatrix} a_{11} \ \dots a_{1k} \\ \vdots \ \ddots \ \vdots \\a_{d1} \ \dots a_{dk}\end{bmatrix} + \mu$$`
+---
+
+# Ideia geral
+
+- Em termos menos matemáticos, o que a fórmula acima expressa é uma mudança de base da matriz `\(X\)`. Estamos tentando escrever cada linha de `\(X\)` como combinações lineares dos vetores coluna de `\(A\)`. 
+
+&lt;img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/GaussianScatterPCA.svg/1200px-GaussianScatterPCA.svg.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Ideia geral
+
+Se escolhermos `\(d = k\)`, não existe erros de reconstrução, é possível reconstruinr `\(X\)` sem erro nenhum: `\(A\)` pode ser a identidade e `\(Y\)` pode ser igual a `\(X\)`.
+
+
+---
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "4:3"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
