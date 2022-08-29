@@ -398,15 +398,81 @@ Três grupos! Como é segundo o conhecimento biológico sobre esses dados.
 
 A clusterização hierárquica parte das observações e aglomera até que os clusters surjam naturalmente. 
 
-Clusterização baseada em centróide, por outro lado, normalmente são método iterativos que procuram os melhores "pontos de referência" para cada cluster. O número de clusters deve ser fixado no começo do algoritmo e então os "pontos de referência" (centróides) são atualizados até encontrar grupos tão diferentes quanto possível. 
+Clusterização baseada em centróides, por outro lado, normalmente são métodos iterativos que procuram os melhores "pontos de referência" para cada cluster. O número de clusters deve ser fixado no começo do algoritmo e então os "pontos de referência" (centróides) são atualizados até encontrar grupos tão diferentes quanto possível. 
 
 Por essa dinâmica, um dos métodos baseados em centróides mais famoso é o método das `\(k\)`-médias.
 
 ---
 
-## Métodos de centróides | Visual
+## Como o k-means funciona?
 
 &lt;img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/K-means_convergence.gif/617px-K-means_convergence.gif?20170530143526" width="65%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## O que o método das k-médias está realmente fazendo?
+
+Para montar a imagem agradável que vimos no slide anterior o algoritmo se preocupa em construir centróides que estejam o mais próximos o possível dos pontos em sua "órbita" (ou cluster).
+
+Vamos ter várias estratégias para medir essa variabilidade, mas uma razoável e que será usada o k-means é aplicar a seguinte fórmula. Vamos dizer que `\(c\)` seja o centróide e `\(x_1\)`, ... `\(x_n\)` os pontos de um cluster.
+
+Podemos medir o quão dispersos esses pontos estão com relação ao centróide somando todas as distâncias:
+
+`$$SSW = \sum_{i=1}^n d(c, x_i) = \sum_{i=1}^n ||c-x_i||^2$$`
+---
+
+## Como medir a variabilidade dentro de cada grupo?
+
+&lt;img src="static/img/dentro_do_grupo.png" width="975" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Como o k-means funciona? (revisitado)
+
+1. Primeiro escolhemos os clusters para começar. Normalmente isso é feito por sorteio.
+
+2. Depois para cada ponto encontramos o cluster ao qual aquele ponto pertence (centróide mais próximo)
+
+3. Os centróides atuais provavelmente não vão ser os melhores possíveis dentro de cada cluster. Vamos atualizar os centróides sendo aqueles que minimizam a `\(SSW\)` de cada cluster.
+
+4. Vamos repetir o passo 2. e em seguida o 4. várias vezes até chegar a uma condição de parada. Ou a soma dos `\(SSW\)` não está sofrendo alterações significativas em uma atualização ou chegamos ao número máximo de iterações.
+
+---
+
+## SSW
+
+Do ponto de vista teórico, o método das k-médias, por conta do vai e vem dos passos 2. e 3. do slide anterior garante que estamos melhorando a seguinte métrica de qualidade dos nossos clusters:
+
+`$$\text{Soma dos quadrados dos grupos} = \sum_{i=1}^k \sum_{\text{pontos no cluster i}} ||c_i-p||^2$$`
+
+Essa métrica, inclusive, pode ser usada para comparar o resultado do algoritmo com qualquer número de clusters.
+
+Vamos ao R!
+
+---
+
+## O que pode dar errado?
+
+Algumas coisas podem dar errado no k-means por conta da estratégia geral utilizada:
+
+- A distância euclidiana simples pode não ser a melhor e, além disso, se as variáveis estiverem em escalas diferentes o resultado pode ser muito influenciado por uma delas.
+
+    - Usar a distância euclidiana essencialmente consiste em particionar o um gráfico 2d de acordo com pontos de referência. Alguns clusters reais tem natureza diferente desses.
+    
+&lt;img src="https://i.stack.imgur.com/SlpL1.png" style="display: block; margin: auto;" /&gt;
+    
+---
+
+# O que pode dar certo?
+
+&lt;img src="https://i.stack.imgur.com/BILDt.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# O que pode dar certo?
+
+&lt;img src="https://i.stack.imgur.com/vBuTf.png" style="display: block; margin: auto;" /&gt;
+
 
 ---
     </textarea>
