@@ -463,5 +463,19 @@ knitr::include_graphics("https://i.stack.imgur.com/BILDt.png")
 knitr::include_graphics("https://i.stack.imgur.com/vBuTf.png")
 ```
 
+---
+
+# Outros jeitos de encontrar o número certo de clusters
+
+- Método da Silhueta ou Silhouette:
+    - Além da soma das distâncias até o centróide, existe uma outra medida interessante conhecida como silhueta do agrupamento. Ela é dada comparando para todos os pontos:
+    - A distância média de um ponto aos seus vizinhos dentro do cluster.
+    - A distância média de um ponto aos seus vizinhos que percentem ao cluster vizinho mais próximo do seu cluster.
+    
+```{r}
+knitr::include_graphics("https://miro.medium.com/max/451/1*cNzzMupO355ohnVqXnvxEA.png")
+```
+    
+  $$s(i) = \frac{b(i)-a(i)}{\max(b(i), a(i))}$$  
 
 ---

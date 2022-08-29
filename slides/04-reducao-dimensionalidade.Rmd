@@ -76,7 +76,7 @@ $$X = \begin{bmatrix}x_{11}  \ x_{12} \ \dots \ x_{1k} \\ x_{21} \ x_{22} \ \dot
 
 - Em termos menos matemáticos, o que a fórmula acima expressa é uma mudança de base da matriz $X$. Estamos tentando escrever cada linha de $X$ como combinações lineares dos vetores coluna de $A$. 
 
-```{r, echo = FALSE, fig.width=5}
+```{r, echo = FALSE, out.width="50%"}
 knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/GaussianScatterPCA.svg/1200px-GaussianScatterPCA.svg.png")
 ```
 
@@ -92,6 +92,6 @@ Observações:
 
 - Se $d = 2$ a versão "zipada" pode ser plotada em um gráfico de dispersão simples. 
 
----
+- As colunas de $Y$ podem ser usadas em um modelo de regressão, ou até em outros modelos não supervisionados.
 
 ---
