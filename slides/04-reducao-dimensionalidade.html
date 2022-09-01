@@ -101,6 +101,30 @@ Toda a mágica por trás do PCA consiste no fato de que muitas vezes podemos des
 A equação acima é a equação de uma reta!
 
 Vamos ao R.
+
+---
+
+# Não linearidade
+
+- A fórmula de aproximação do PCA é linear, ou seja, ela é uma equação que busca incógnitas para plugar em uma equação que faz produtos e somas.
+
+`$$X = T \times A + \mu$$`
+- Isso é muito bom em vários contextos, mas as aproximações proporcionadas pelo PCA simplesmente não são úteis na prática.
+
+---
+
+# Não linearidade
+
+- As técnicas da família SNE buscam encontrar o que se chama de Stochastic Neighbor Embedding, que essencialmente parte da seguinte ideia:
+
+É útil imaginar que os pontos são posicionados de acordo com um sorteio:
+
+`$$\text{Sorteia }x_1\rightarrow\text{Sorteia }x_2\text{ a partir de }x_1 \rightarrow \text{Sorteia }x_3\text{ a partir de }x_2$$`
+A probabilidade de encontramos um `\(x_2\)` a partir de um `\(x_1\)` e de um `\(x_3\)` a partir de `\(x_2\)` da distância entre os pontos. Também existe uma chance de um ponto ser muito distante dos anteriores, e esse número é chamado de "perplexidade".
+
+A ideia por trás do tSNE é procurar por uma distribuição que leve `\(x_j\)` a `\(x_i\)` em dimensão baixa que produza uma matriz de distâncias _similar_ a matriz de distâncias de dimensão alta.
+
+---
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
