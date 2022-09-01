@@ -472,6 +472,8 @@ knitr::include_graphics("https://i.stack.imgur.com/vBuTf.png")
     - A distância média de um ponto aos seus vizinhos dentro do cluster.
     - A distância média de um ponto aos seus vizinhos que percentem ao cluster vizinho mais próximo do seu cluster.
     
+---
+    
 ```{r}
 knitr::include_graphics("https://miro.medium.com/max/451/1*cNzzMupO355ohnVqXnvxEA.png")
 ```

@@ -52,7 +52,22 @@ class: middle, center
 ---
 # Ideia geral
 
-- A Análise de Componentes Principais é um algoritmo de **redução de dimensionalidade**, embora seus usos possam ser dos mais variados
+- Redução de dimensionalidade é um termo que se usa normalmente para falar da redução do número de colunas de uma base.
+
+    - Queremos ir das dimensões $n \times p$ para $n \times d$, com $d<p$.
+    
+- Motivação:
+    
+    - Frequentemente temos colunas com mais ou menos a mesma informação que poderiam ser resumidas em apenas uma delas ou talvez em um resumo das duas (como uma média).
+    
+    - Quando $d=2$ temos a agradável situação em que $n \times p$ vira uma tabela que pode ser visualizada por um gráfico de dispersão.
+    
+    - Em algumas situações, uma análise nas dimensões $n \times d$ é melhor do que uma análise em $n \times p$, como por exemplo uma clusterização ou modelo estatístico.
+
+---
+# Ideia geral
+
+- A Análise de Componentes Principais é um algoritmo de **redução de dimensionalidade**
 
 - Digamos que os nossos dados sejam representados pela matriz $X$, com $n$ linhas e $k$ colunas:
 
@@ -74,7 +89,7 @@ $$X = \begin{bmatrix}x_{11}  \ x_{12} \ \dots \ x_{1k} \\ x_{21} \ x_{22} \ \dot
 
 # Ideia geral
 
-- Em termos menos matemáticos, o que a fórmula acima expressa é uma mudança de base da matriz $X$. Estamos tentando escrever cada linha de $X$ como combinações lineares dos vetores coluna de $A$. 
+- Quando $k = d = 2$ podemos visualizar o que está acontecendo. Em termos menos matemáticos, o que a fórmula acima expressa é uma mudança de base da matriz $X$. Estamos tentando escrever cada linha de $X$ como combinações lineares dos vetores coluna de $A$. No plano, queremos encontrar as setas abaixo:
 
 ```{r, echo = FALSE, out.width="50%"}
 knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/GaussianScatterPCA.svg/1200px-GaussianScatterPCA.svg.png")
@@ -84,14 +99,21 @@ knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/thumb/f/
 
 # Ideia geral
 
-Observações: 
+$$X = \begin{bmatrix}x_{11}  \ x_{12}\\ x_{21} \ x_{22}  \\ x_{i1} \ x_{i2}  \\ x_{n1} \ x_{n2}\end{bmatrix} = \begin{bmatrix}y_{11}  \ y_{12}\\ y_{21} \ y_{22}  \\ y_{i1} \ y_{i2}  \\ y_{n1} \ y_{n2}\end{bmatrix} \times \begin{bmatrix}a_{11}  \ a_{12}\\ a_{21} \ a_{22}  \end{bmatrix} + \mu$$
 
-- Se escolhermos $d = k$, não existe erros de reconstrução, é possível reconstruinr $X$ sem erro nenhum: $A$ pode ser a identidade e $Y$ pode ser igual a $X$.
-
-- Se o $d$ é menor que $k$ temos uma versão "zipada" de $X$.
-
-- Se $d = 2$ a versão "zipada" pode ser plotada em um gráfico de dispersão simples. 
-
-- As colunas de $Y$ podem ser usadas em um modelo de regressão, ou até em outros modelos não supervisionados.
+$$(x_{11}, x_{12}) = (y_{11} \times a_{11} + y_{12} \times a_{21}, y_{11} \times a_{12} + y_{12} \times a_{22}) + \mu$$
 
 ---
+
+# Ideia geral
+
+Toda a mágica por trás do PCA consiste no fato de que muitas vezes podemos descartar as segundas parcelas na fórmula abaixo (por conta de um erro baixo):
+
+$$\begin{bmatrix}x_{11}  \ x_{12}\\ x_{21} \ x_{22}  \\ x_{i1} \ x_{i2}  \\ x_{n1} \ x_{n2}\end{bmatrix} \approx \begin{bmatrix}y_{11}  \\ y_{21}   \\ y_{i1} \\ y_{n1} \end{bmatrix} \times \begin{bmatrix}a_{11} \ a_{12} \end{bmatrix} + \mu$$
+
+$$(x_{11}, x_{12}) = (y_{11} \times a_{11} + y_{12} \times a_{21}, y_{11} \times a_{12} + y_{12} \times a_{22}) + \mu$$
+$$(x_{11}, x_{12}) \approx (y_{11} \times a_{11}, y_{11} \times a_{12}) + \mu$$
+
+A equação acima é a equação de uma reta!
+
+Vamos ao R.
